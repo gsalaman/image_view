@@ -1,4 +1,4 @@
-# delays
+# Used in main loop
 from time import sleep
 
 ###################################
