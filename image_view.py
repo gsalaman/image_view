@@ -1,3 +1,4 @@
+# delays
 from time import sleep
 
 ###################################
