@@ -41,23 +41,31 @@ screen_draw = ImageDraw.Draw(screen)
 
 print (screen.getbands())
 
-
-mask = Image.new("L", (icon_size,icon_size))
-mask_draw = ImageDraw.Draw(mask)
-mask_draw.rectangle((0,0,icon_size,icon_size),0)
-mask_draw.rectangle((2,2,icon_size -3,icon_size-3),255)
-
-
 icon_image = Image.open("Hint.png")
 icon_image = icon_image.convert("RGBA")
 icon_image = icon_image.resize((icon_size,icon_size))
+
+# now that we have our image, we want to make a transparency mask.
+# start by looking at each pixel, and if it's black, make the mask
+# transparent (also black).  Otherwise, make it fully opaque (white)
+mask = Image.new("L", (icon_size,icon_size))
+icon_data = icon_image.getdata()
+mask_data = []
+for item in icon_data:
+  if item[0] == 0 and item[1] == 0 and item[2] == 0:
+    mask_data.append(0)
+    print "transparent"
+  else:
+    mask_data.append(255)
+    print "opaque"
+mask.putdata(mask_data)
 
 bg_color = (0,0,100)
 
 screen_draw.rectangle((0,0,total_columns,total_rows), fill = bg_color)
 
-#screen.paste(icon_image,(10,10),mask)
-screen.paste(icon_image,(10,10))
+screen.paste(icon_image,(10,10),mask)
+#screen.paste(icon_image,(10,10))
 
 screen = screen.convert("RGB")
 
